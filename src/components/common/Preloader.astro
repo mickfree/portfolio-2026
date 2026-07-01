@@ -1,0 +1,120 @@
+---
+---
+<div id="preloader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-all duration-800 ease-[cubic-bezier(0.25,1,0.5,1)]">
+  <div class="relative overflow-hidden select-none">
+    <div 
+      id="preloader-number" 
+      class="font-display text-[16vw] md:text-[10vw] font-bold tracking-normal text-black tabular-nums leading-none flex justify-center items-center"
+      style="font-variant-numeric: tabular-nums;"
+    >
+      0
+    </div>
+  </div>
+</div>
+
+<style>
+  #preloader.fade-out {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+</style>
+
+<script>
+  function initPreloader() {
+    const preloader = document.getElementById('preloader');
+    const numberEl = document.getElementById('preloader-number');
+    if (!preloader || !numberEl) return;
+
+    // Check if we already loaded in this session to prevent flashing on client-side routing
+    if ((window as any).hasLoaded) {
+      preloader.style.display = 'none';
+      document.body.classList.remove('overflow-hidden');
+      return;
+    }
+
+    // Lock scrolling while preloading
+    document.body.classList.add('overflow-hidden');
+
+    let current = 0;
+    let target = 0;
+    let imagesLoaded = 0;
+    
+    // Select all images currently in the document
+    const images = Array.from(document.images);
+    const totalImages = images.length;
+
+    if (totalImages === 0) {
+      target = 100;
+    } else {
+      // Setup listener for each image
+      images.forEach(img => {
+        if (img.complete) {
+          onImageLoad();
+        } else {
+          img.addEventListener('load', onImageLoad);
+          img.addEventListener('error', onImageLoad); // continue counting if an image fails to load
+        }
+      });
+    }
+
+    function onImageLoad() {
+      imagesLoaded++;
+      if (totalImages > 0) {
+        // Increment target up to 90% depending on images loaded
+        target = Math.min(90, Math.round((imagesLoaded / totalImages) * 90));
+      }
+    }
+
+    // Set target to 100% when everything is loaded
+    window.addEventListener('load', () => {
+      target = 100;
+    });
+
+    // Fallback: force progress to 100% after 2.5 seconds in case of slow API calls or scripts
+    setTimeout(() => {
+      target = 100;
+    }, 2500);
+
+    // Animation interval loop
+    const interval = setInterval(() => {
+      if (current < target) {
+        // Ease-out step calculation
+        const step = Math.max(1, Math.ceil((target - current) * 0.1));
+        current = Math.min(target, current + step);
+        numberEl.textContent = String(current);
+      }
+
+      if (current >= 100) {
+        clearInterval(interval);
+        (window as any).hasLoaded = true;
+
+        // Start fade-out animation
+        preloader.classList.add('fade-out');
+
+        // Restore scrolling on the body
+        document.body.classList.remove('overflow-hidden');
+
+        // Remove from DOM after transition completes to keep it clean
+        setTimeout(() => {
+          preloader.remove();
+        }, 800);
+      }
+    }, 25);
+  }
+
+  // Initial execution
+  initPreloader();
+
+  // Handle subsequent client-side swaps when using Astro ClientRouter
+  document.addEventListener('astro:after-swap', () => {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+      if ((window as any).hasLoaded) {
+        preloader.remove();
+      } else {
+        initPreloader();
+      }
+    }
+  });
+</script>

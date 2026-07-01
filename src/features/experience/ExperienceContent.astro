@@ -1,0 +1,57 @@
+---
+import { experiences } from "@/data/experiences";
+---
+
+<aside
+  class="relative flex-1 w-full h-full p-8 md:p-12 flex flex-col justify-between overflow-y-auto no-scrollbar font-sans bg-bg-primary"
+>
+  <div
+    class="flex-1 flex flex-col justify-start pt-4 relative min-h-[350px] z-10"
+  >
+    <!-- Header -->
+    <div
+      class="flex justify-between items-center text-[calc(18px*var(--font-scale-factor,1))] text-text-secondary uppercase tracking-widest mb-8 border-b border-border-custom/50 pb-2"
+    >
+      <span>Trayectoria Profesional</span>
+      <span class="font-mono">Experiencia</span>
+    </div>
+
+    {
+      experiences.map((exp) => (
+        <div class="experience-detail-card mb-12 border-l border-border-custom/50 pl-6 relative">
+          <div class="absolute w-3 h-3 rounded-full bg-text-primary left-[-6px] top-1.5" />
+          <span class="text-lg uppercase tracking-wider text-text-secondary font-medium block mb-2">
+            {exp.company} / {exp.role} — {exp.location} ({exp.dates})
+          </span>
+          <h2 class="text-3xl font-bold tracking-tight mb-4 font-display text-text-primary uppercase">
+            {exp.headline}
+          </h2>
+          <p
+            class="text-lg text-text-secondary leading-relaxed mb-4"
+            set:html={exp.descriptionHtml}
+          />
+          <p class="text-lg text-text-secondary leading-relaxed mb-4">
+            {exp.bullets.map((bullet, idx) => (
+              <>
+                — {bullet.label && <strong>{bullet.label}:</strong>}{" "}
+                {bullet.text}
+                {idx < exp.bullets.length - 1 && <br />}
+              </>
+            ))}
+          </p>
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- Decorative Frog Illustration aligned absolutely to the bottom-right edge -->
+  <div
+    class="hidden md:block absolute -bottom-16 right-0 max-w-[120px] lg:max-w-[400px] w-auto h-auto pointer-events-none select-none z-0"
+  >
+    <img
+      src="/images/frog_01.webp"
+      alt="Frog Illustration"
+      class="w-full h-auto block object-contain object-bottom drop-shadow-lg"
+    />
+  </div>
+</aside>

@@ -1,0 +1,17 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ContactContent from "@/features/contact/ContactContent.astro";
+---
+
+<BaseLayout
+	title="Michael | Contacto"
+	description="Desarrollo de software y backend - Contacto"
+>
+	<!-- CONTACT SECTION -->
+	<section
+		id="contact"
+		class="flex flex-col md:flex-row w-full h-auto md:h-full md:absolute md:inset-0 border-b border-border-custom md:border-b-0"
+	>
+		<ContactContent />
+	</section>
+</BaseLayout>

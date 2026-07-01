@@ -1,0 +1,19 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import AboutContent from "@/features/about/AboutContent.astro";
+import ProfileGallery from "@/features/about/ProfileGallery.astro";
+---
+
+<BaseLayout
+	title="Michael | Sobre Mí"
+	description="Desarrollo de software y backend - Sobre Mí"
+>
+	<!-- ABOUT ME SECTION -->
+	<section
+		id="about"
+		class="flex flex-col md:flex-row w-full h-auto md:h-full md:absolute md:inset-0 border-b border-border-custom md:border-b-0"
+	>
+		<AboutContent />
+		<ProfileGallery />
+	</section>
+</BaseLayout>

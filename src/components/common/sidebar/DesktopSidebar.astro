@@ -1,0 +1,111 @@
+---
+const pathname = Astro.url.pathname;
+const cleanPath = pathname.replace(/\/$/, "");
+
+const isActive = (path: string) => {
+  if (path === "/") {
+    return cleanPath === "" || cleanPath === "/index.html";
+  }
+  return cleanPath === path;
+};
+---
+
+<!-- COLUMN 1: SIDEBAR (Desktop) -->
+<aside
+  class="hidden md:flex flex-col justify-between w-[400px] min-w-[400px] border-r border-border-custom bg-bg-primary p-8 h-full z-20 transition-colors duration-300 font-sans"
+>
+  <div>
+    <!-- Logo -->
+    <a
+      href="/"
+      class="block text-[calc(120px*var(--font-scale-factor,1))] leading-[0.85] font-bold tracking-tighter font-display mb-12 select-none hover:opacity-80 transition-opacity"
+    >
+      Mckf
+    </a>
+
+    <!-- Navigation -->
+    <div class="w-full h-px bg-border-custom my-8"></div>
+    <nav class="flex flex-col gap-4 text-2xl font-medium" id="desktop-nav">
+      <a
+        href="/"
+        class={`desktop-nav-link group flex items-center justify-between transition-all duration-300 ${isActive("/") ? "text-text-primary pl-2" : "text-text-secondary hover:text-text-primary hover:pl-2"}`}
+        data-section="projects"
+      >
+        <span>Proyectos</span>
+        <span
+          class={`nav-arrow text-xs text-text-secondary transition-opacity ${isActive("/") ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
+        ></span>
+      </a>
+      <a
+        href="/about"
+        class={`desktop-nav-link group flex items-center justify-between transition-all duration-300 ${isActive("/about") ? "text-text-primary pl-2" : "text-text-secondary hover:text-text-primary hover:pl-2"}`}
+        data-section="about"
+      >
+        <span>Sobre Mí</span>
+        <span
+          class={`nav-arrow text-xs text-text-secondary transition-opacity ${isActive("/about") ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
+        ></span>
+      </a>
+      <a
+        href="/stack"
+        class={`desktop-nav-link group flex items-center justify-between transition-all duration-300 ${isActive("/stack") ? "text-text-primary pl-2" : "text-text-secondary hover:text-text-primary hover:pl-2"}`}
+        data-section="stack"
+      >
+        <span>Stack</span>
+        <span
+          class={`nav-arrow text-xs text-text-secondary transition-opacity ${isActive("/stack") ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
+        ></span>
+      </a>
+      <a
+        href="/experience"
+        class={`desktop-nav-link group flex items-center justify-between transition-all duration-300 ${isActive("/experience") ? "text-text-primary pl-2" : "text-text-secondary hover:text-text-primary hover:pl-2"}`}
+        data-section="experience"
+      >
+        <span>Experiencia</span>
+        <span
+          class={`nav-arrow text-xs text-text-secondary transition-opacity ${isActive("/experience") ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
+        ></span>
+      </a>
+      <a
+        href="/contact"
+        class={`desktop-nav-link group flex items-center justify-between transition-all duration-300 ${isActive("/contact") ? "text-text-primary pl-2" : "text-text-secondary hover:text-text-primary hover:pl-2"}`}
+        data-section="contact"
+      >
+        <span>Contacto</span>
+        <span
+          class={`nav-arrow text-xs text-text-secondary transition-opacity ${isActive("/contact") ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
+        ></span>
+      </a>
+    </nav>
+  </div>
+
+  <div class="relative w-full mt-auto">
+    <div class="w-full overflow-hidden mb-[-2rem] flex justify-center items-end">
+      <img
+        src="/images/people_03x2.webp"
+        alt="People"
+        class="w-[180%] min-w-[180%] h-auto block"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="absolute bottom-0 left-0 right-0 flex items-center justify-between z-10">  
+      <button
+        id="menu-btn-desktop"
+        class="px-5 py-2 rounded-full border border-border-custom bg-bg-secondary/40 text-[calc(10px*var(--font-scale-factor,1))] tracking-widest uppercase hover:bg-text-primary hover:text-bg-primary hover:border-text-primary transition-all duration-300 cursor-pointer font-medium"
+      >
+        Menú
+      </button>
+
+      <button
+        id="theme-toggle-switch"
+        aria-label="Toggle Theme"
+        class="relative w-14 h-7 rounded-full border border-border-custom bg-bg-secondary p-1 flex items-center cursor-pointer transition-all hover:border-text-secondary"
+      >
+        <span
+          class="theme-switch-dot w-5 h-5 rounded-full bg-text-primary transition-transform duration-300 transform translate-x-0"
+          id="theme-switch-dot"></span>
+      </button>
+    </div>
+  </div>
+</aside>

@@ -1,0 +1,22 @@
+---
+interface Props {
+  title: string;
+  className?: string;
+}
+
+const { title, className = "", } = Astro.props;
+---
+
+<div class={`accordion-item ${className}`}>
+  <button 
+    class="accordion-trigger w-full flex justify-between items-center py-4 border-b border-border-custom hover:text-text-hover transition-colors text-left focus:outline-none" 
+  >
+    <span class="text-sm uppercase tracking-widest font-semibold">{title}</span>
+  </button>
+  
+  <div class={`accordion-content`}>
+    <div class="accordion-inner pb-4 pt-2 text-xs text-text-secondary leading-relaxed flex flex-col gap-2">
+      <slot />
+    </div>
+  </div>
+</div>

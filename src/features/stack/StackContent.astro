@@ -1,0 +1,54 @@
+---
+import { categories } from "@/data/categories"
+import TechIcon from "@/components/icons/astro/logos/TechIcon.astro"
+---
+
+<aside
+  class="relative flex-1 w-full h-full px-4 py-8 sm:p-8 md:p-12 flex flex-col justify-between overflow-y-auto no-scrollbar font-sans bg-bg-primary"
+>
+  <div class="flex-1 flex flex-col justify-start relative min-h-[350px] z-10">
+    <div
+      class="flex justify-between items-center text-[calc(18px*var(--font-scale-factor,1))] text-text-secondary uppercase tracking-widest mb-8 border-b border-border-custom/50 pb-2"
+    >
+      <span>Stack Tecnológico</span>
+    </div>
+
+    <div class="flex flex-col gap-8 md:gap-12">
+      {categories.map((category) => (
+        <div>
+          <span
+            class="text-lg uppercase tracking-widest text-text-secondary font-semibold block mb-4 md:mb-6 border-b border-border-custom"
+          >
+            {category.title}
+          </span>
+          
+          <div class="flex flex-wrap gap-2">
+            {category.items.map((item) => (
+              <div
+                class="flex flex-col items-center justify-center p-4 min-w-[100px] h-[100px] bg-bg-secondary/40 border border-border-custom/40 rounded hover:border-border-custom hover:bg-bg-secondary transition-all duration-200 group cursor-default"
+              >
+                <div class="flex items-center justify-center">
+                  <TechIcon
+                    name={item.logo}
+                    class="w-12 h-12 transition-all duration-200 group-hover:scale-110"
+                  />
+                </div>
+                <span class="text-xs sm:text-sm md:text-[calc(14px*var(--font-scale-factor,1))] uppercase tracking-wider font-mono text-text-secondary mt-1 block truncate text-center max-w-[100px]">
+                  {item.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="hidden lg:block absolute -top-16 right-0 max-w-[280px] xl:max-w-[560px] w-auto h-auto pointer-events-none select-none z-10">
+    <img
+      src="/images/people_03.png"
+      alt="Ilustración de Stack"
+      class="w-full h-auto block object-contain object-top drop-shadow-xl"
+    />
+  </div>
+</aside>

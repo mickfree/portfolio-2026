@@ -1,0 +1,107 @@
+---
+import TechIcon from "@/components/icons/astro/logos/TechIcon.astro";
+
+interface Stack {
+  name: string;
+  icon: string;
+}
+
+interface Project {
+  id: string;
+  title: string;
+  category: string;
+  year: string;
+  description: string;
+  images: (string | string[])[];
+  stacks?: Stack[];
+  clients?: string[];
+  contact?: {
+    text: string;
+    email: string;
+    socials?: { name: string; url: string }[];
+  };
+}
+
+interface Props {
+  projects: Project[];
+}
+
+const { projects } = Astro.props;
+---
+
+<section class="flex-1 min-w-0 h-[calc(100vh-64px)] md:h-full overflow-y-scroll no-scrollbar scroll-smooth" id="images-column">
+  {projects.map((project) => (
+    <div 
+      class="project-slide w-full h-auto relative flex flex-col gap-[20px] pb-16 md:pb-24 last:pb-0 border-b border-border-custom md:border-b-0 pt-4"
+      data-project-id={project.id}
+      id={`project-slide-${project.id}`}
+    >
+      {project.images.map((imageItem, imgIndex) => {
+        if (Array.isArray(imageItem)) {
+          return (
+            <div class="w-full flex justify-center py-4">
+              <div class="project-mobile-grid grid grid-cols-3 gap-[20px] w-full max-w-[800px] px-6 md:px-0 transition-all duration-500">
+                {imageItem.map((subImage, subIndex) => (
+                  <div class="relative overflow-hidden w-full rounded-[20px] border border-border-custom/20">
+                    <img 
+                      src={subImage} 
+                      alt={`${project.title} - Imagen ${imgIndex + 1}.${subIndex + 1}`} 
+                      class="w-full h-auto block project-image-clickable"
+                      loading="eager"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        } else {
+          return (
+            <div class="relative overflow-hidden w-full group/img">
+              <img 
+                src={imageItem} 
+                alt={`${project.title} - Imagen ${imgIndex + 1}`} 
+                class="w-full h-auto block project-image-clickable"
+                loading="eager"
+              />
+            </div>
+          );
+        }
+      })}
+      
+      <!-- Project details inline container -->
+      <div class="project-details-inline relative z-10 w-full p-6 md:p-12 border-t border-border-custom/15 bg-bg-secondary/30 mt-8  backdrop-blur-sm transition-all duration-300">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Text details -->
+          <div class="lg:col-span-2 flex flex-col justify-center">
+            <span class="text-[calc(11px*var(--font-scale-factor,1))] font-mono uppercase tracking-widest text-text-secondary">{project.category}</span>
+            <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-text-primary mt-2 mb-4 font-display">{project.title}</h2>
+            <p class="text-sm md:text-base text-text-secondary leading-relaxed max-w-2xl font-sans">
+              {project.description}
+            </p>
+          </div>
+          
+          <!-- Tech stack -->
+          {project.stacks && project.stacks.length > 0 && (
+            <div class="flex flex-col justify-start">
+              <span class="text-xs font-mono uppercase tracking-widest text-text-secondary mb-4 border-b border-border-custom/15 pb-2 block">Tecnologías</span>
+              <div class="flex flex-wrap gap-2">
+                {project.stacks.map((tech) => (
+                  <div class="flex items-center gap-2.5 px-3 py-2 bg-bg-primary/60 border border-border-custom/10 rounded-xl hover:border-border-custom/30 hover:bg-bg-secondary transition-all duration-300 group cursor-default">
+                    <TechIcon 
+                      name={tech.icon} 
+                      class="w-5 h-5 opacity-80 group-hover:opacity-100 transition-all duration-200"
+                    />
+                    <span class="text-xs font-mono tracking-wider text-text-secondary group-hover:text-text-primary transition-colors">
+                      {tech.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  ))}
+  
+</section>

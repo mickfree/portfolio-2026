@@ -1,0 +1,94 @@
+---
+import DetailSection from "@/components/common/DetailSection.astro";
+import TechIcon from "@/components/icons/astro/logos/TechIcon.astro";
+
+interface Stack {
+  name: string;
+  icon: string;
+}
+
+interface Project {
+  id: string;
+  title: string;
+  category: string;
+  year: string;
+  description: string;
+  images: (string | string[])[];
+  stacks?: Stack[];
+  clients?: string[];
+  contact?: {
+    text: string;
+    email: string;
+    socials?: { name: string; url: string }[];
+  };
+}
+
+interface Props {
+  projects: Project[];
+}
+
+const { projects } = Astro.props;
+---
+
+<aside
+  class="hidden md:flex flex-col justify-start flex-1 min-w-0 border-l border-border-custom bg-bg-primary p-8 h-full z-20 transition-colors duration-300 overflow-y-auto no-scrollbar font-sans"
+>
+  <!-- Project Details Box (will switch contents dynamically via Intersection Observer) -->
+  <div
+    id="project-info-container"
+    class="grid grid-cols-1 grid-rows-1 pt-4"
+  >
+    {
+      projects.map((project, index) => (
+        <div
+          class={`project-details-card col-start-1 row-start-1 fade-transition ${index === 0 ? "" : "fade-out"}`}
+          data-project-details-id={project.id}
+        >
+          <div class="flex justify-between items-center text-[calc(18px*var(--font-scale-factor,1))] text-text-secondary uppercase tracking-widest mb-8 border-b-2 border-border-custom pb-2">
+            <span>Proyectos</span>
+          </div>
+
+          <span class="text-xl uppercase tracking-wider text-text-secondary font-medium block mb-2">
+            {project.category}
+          </span>
+          <h2 class="text-5xl font-bold mb-6 font-display text-text-primary">
+            {project.title}
+          </h2>
+          <p class="text-lg text-text-secondary leading-relaxed font-sans mb-8">
+            {project.description}
+          </p>
+
+          <div class="flex flex-col border-t border-border-custom pt-2">
+            {project.stacks && project.stacks.length > 0 && (
+              <DetailSection title="Stack">
+                <div class="flex flex-wrap gap-2">
+                  {project.stacks.map((service) => (
+                    <div class="flex flex-col items-center justify-between pt-6 pb-4 px-2 w-[120px] bg-bg-secondary/40 border border-border-custom/40 rounded hover:border-border-custom hover:bg-bg-secondary transition-all duration-200 group cursor-default">
+                      <div class="flex-1 flex items-center justify-center">
+                        <TechIcon
+                          name={service.icon}
+                          class="w-10 h-10 sm:w-10 sm:h-10 text-text-primary transition-all duration-200"
+                        />
+                      </div>
+                      <span class="text-[calc(18px*var(--font-scale-factor,1))] uppercase tracking-wider font-mono text-text-secondary mt-4 block truncate max-w-full">
+                        {service.name}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </DetailSection>
+            )}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <!-- Decorative Frog Illustration aligned absolutely to the bottom-right edge -->
+  <div class="hidden md:block absolute -bottom-4 right-0 max-w-[120px] lg:max-w-[700px] w-auto h-auto pointer-events-none select-none z-0">
+    <img
+      src="/images/siren_01.webp"
+      alt="Siren Illustration"
+      class="w-full h-auto block object-contain object-bottom drop-shadow-lg"
+    />
+  </div>
+</aside>

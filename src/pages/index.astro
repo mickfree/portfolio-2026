@@ -1,0 +1,146 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ProjectGallery from "@/features/projects/ProjectGallery.astro";
+import ProjectDetails from "@/features/projects/ProjectDetails.astro";
+import { projects } from "@/data/proyects";
+---
+
+<BaseLayout
+	title="Michael | Portafolio"
+	description="Desarrollo de software y backend - Proyectos"
+>
+	<!-- PROJECTS SECTION -->
+	<section
+		id="projects"
+		class="flex flex-col md:flex-row w-full h-auto md:h-full md:absolute md:inset-0 border-b border-border-custom md:border-b-0"
+	>
+		<ProjectGallery projects={projects} />
+		<ProjectDetails projects={projects} />
+	</section>
+</BaseLayout>
+
+<style is:global>
+	/* Transitions for sliding layout columns */
+	#images-column {
+		transition: flex 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	#projects aside {
+		transition:
+			flex 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+			opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+			padding 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+			border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	/* Dynamic cursor for gallery images */
+	.project-image-clickable {
+		cursor: zoom-in;
+	}
+
+	#projects.gallery-expanded .project-image-clickable {
+		cursor: zoom-out;
+	}
+
+	/* When gallery is expanded */
+	#projects.gallery-expanded #images-column {
+		flex: 1 1 100% !important;
+	}
+
+	#projects.gallery-expanded aside {
+		flex: 0 0 0% !important;
+		opacity: 0 !important;
+		padding: 0 !important;
+		border-left-width: 0px !important;
+		pointer-events: none;
+		overflow: hidden !important;
+	}
+
+	/* Expand mobile mockups grid when gallery is expanded */
+	.project-mobile-grid {
+		transition: max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	#projects.gallery-expanded .project-mobile-grid {
+		max-width: 1200px !important;
+	}
+
+	/* Toggle details visibility inline */
+	.project-details-inline {
+		display: block; /* Always visible on mobile */
+	}
+
+	@media (min-width: 768px) {
+		/* Hide inline details by default on desktop (since the sidebar is visible) */
+		.project-details-inline {
+			display: none;
+		}
+
+		/* Show inline details on desktop only when the gallery is expanded */
+		#projects.gallery-expanded .project-details-inline {
+			display: block;
+		}
+	}
+</style>
+
+<script>
+	function initProjectsPage() {
+		// 1. Observer for Sidebar Details
+		const slides = document.querySelectorAll(".project-slide");
+		const detailCards = document.querySelectorAll(".project-details-card");
+		const imagesCol = document.getElementById("images-column");
+		let projectObserver: IntersectionObserver | null = null;
+
+		if (slides.length > 0 && detailCards.length > 0 && imagesCol) {
+			let currentActiveId = "1";
+
+			const observerOptions = {
+				root: imagesCol,
+				rootMargin: "-30% 0px -30% 0px",
+				threshold: 0,
+			};
+
+			projectObserver = new IntersectionObserver((entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						const projectId =
+							entry.target.getAttribute("data-project-id");
+						if (projectId && projectId !== currentActiveId) {
+							currentActiveId = projectId;
+
+							// Actualizar la tarjeta de detalle activa
+							detailCards.forEach((card) => {
+								const cardId = card.getAttribute(
+									"data-project-details-id",
+								);
+								if (cardId === currentActiveId) {
+									card.classList.remove("fade-out");
+								} else {
+									card.classList.add("fade-out");
+								}
+							});
+						}
+					}
+				});
+			}, observerOptions);
+
+			slides.forEach((slide) => projectObserver?.observe(slide));
+		}
+
+		// 2. Click to Expand/Collapse Toggle
+		const projectsSection = document.getElementById("projects");
+		if (projectsSection) {
+			const clickableImages = document.querySelectorAll(
+				".project-image-clickable",
+			);
+			clickableImages.forEach((img) => {
+				img.addEventListener("click", () => {
+					projectsSection.classList.toggle("gallery-expanded");
+				});
+			});
+		}
+	}
+
+	// Initialize on page load and navigation (supports View Transitions)
+	document.addEventListener("astro:page-load", initProjectsPage);
+</script>

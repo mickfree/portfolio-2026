@@ -1,0 +1,90 @@
+---
+import DetailSection from "@/components/common/DetailSection.astro";
+import AnimatedList from "@/features/animations/AnimatedList.astro";
+
+const sayList = [
+  "Hola",
+  "Hello",
+  "Bonjour",
+  "Ciao",
+  "Olá",
+  "Hallo",
+  "Konnichiwa",
+];
+
+const stack = [
+  "Python",
+  "JavaScript",
+  "React",
+  "Django",
+  "Flask",
+  "FastAPI",
+  "Go",
+];
+
+const verbList = [
+  "construir",
+  "crear",
+  "desarrollar",
+  "programar"
+];
+
+---
+
+<aside
+  class="flex-1 w-full h-full p-8 md:p-12 flex flex-col justify-between overflow-y-auto no-scrollbar font-sans bg-bg-primary md:border-l md:border-border-custom"
+>
+  <div class="flex-1 flex flex-col justify-start pt-4">
+    <!-- Header -->
+    <div
+      class="flex justify-between items-center text-[calc(18px*var(--font-scale-factor,1))] text-text-secondary uppercase tracking-widest mb-8 border-b border-border-custom/50 pb-2"
+    >
+      <span>Sobre Mí</span>
+    </div>
+
+    <!-- Category/Role -->
+    <span
+      class="text-xs uppercase tracking-wider text-text-secondary font-medium block mb-2"
+    >
+      Desarrollador de Software
+    </span>
+
+    <!-- Big Title -->
+    <h2
+      class="text-4xl md:text-5xl font-bold tracking-tight mb-8 font-display text-text-primary leading-[1.1] uppercase"
+    >
+      ME GUSTA <AnimatedList list={verbList} class="font-bold"/> <br>ARQUITECTURAS ESCALABLES Y SOSTENIBLES.
+    </h2>
+
+    <!-- Main Bio paragraphs -->
+    <div
+      class="flex flex-col gap-6 text-lg text-text-secondary leading-relaxed mb-10 max-w-auto"
+    >
+      <p>
+        <AnimatedList list={sayList} class="font-bold"/>, mi nombre es Michael. Soy desarrollador de software apasionado por
+        la tecnología con 2 años de experiencia. Ayudo a empresas en proyectos basados en <AnimatedList list={stack} class="font-bold"/>
+      </p>
+      <p>
+        He dedicado años al desarrollo de sistemas de diseño y aplicaciones web
+        para clientes como LoJusto, JPingenieria y Ttransporto, así como a otros
+        proyectos para empresas de todos los tamaños. Como desarrollador, me
+        centro en crear experiencias de usuario excepcionales y mejorar la web
+        mediante aplicaciones fáciles de mantener, escalables y eficientes.
+      </p>
+    </div>
+    <DetailSection title="Mi Enfoque">
+      <p class="text-lg">
+        Diseño e implemento arquitecturas limpias y robustas, priorizando el
+        rendimiento, la escalabilidad y la facilidad de mantenimiento en cada
+        línea de código backend y frontend.
+      </p>
+    </DetailSection>
+    <DetailSection
+      title="Clientes Destacados"
+    >
+      <span class="text-lg">— LoJusto</span>
+      <span class="text-lg">— JPingenieria</span>
+      <span class="text-lg">— Ttransporto</span>
+    </DetailSection>
+  </div>
+</aside>

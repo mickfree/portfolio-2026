@@ -1,0 +1,69 @@
+---
+import IconAstro from './IconAstro.astro';
+import IconAws from './IconAws.astro';
+import IconDjango from './IconDjango.astro';
+import IconDocker from './IconDocker.astro';
+import IconFastapi from './IconFastapi.astro';
+import IconGin from './IconGin.astro';
+import IconGit from './IconGit.astro';
+import IconGo from './IconGo.astro';
+import IconHtmx from './IconHtmx.astro';
+import IconJavascript from './IconJavascript.astro';
+import IconMysql from './IconMysql.astro';
+import IconNodedotjs from './IconNodedotjs.astro';
+import IconPostgresql from './IconPostgresql.astro';
+import IconPostman from './IconPostman.astro';
+import IconPython from './IconPython.astro';
+import IconReact from './IconReact.astro';
+import IconSqlite from './IconSqlite.astro';
+import IconTailwindcss from './IconTailwindcss.astro';
+import IconTypescript from './IconTypescript.astro';
+
+interface Props {
+  name: string;
+  class?: string;
+  color?: string;
+}
+
+const { name, class: className = "", color = "currentColor" } = Astro.props;
+
+// Convert path /logos/foo.svg or name to base name key
+// e.g. "/logos/django.svg" -> "django"
+// e.g. "Django" -> "django"
+const key = name
+  ? name
+      .toLowerCase()
+      .replace(/^\/?logos\//, '')
+      .replace(/\.svg$/, '')
+      .trim()
+  : "";
+
+const iconMap: Record<string, any> = {
+  'astro': IconAstro,
+  'aws': IconAws,
+  'django': IconDjango,
+  'docker': IconDocker,
+  'fastapi': IconFastapi,
+  'gin': IconGin,
+  'git': IconGit,
+  'go': IconGo,
+  'htmx': IconHtmx,
+  'javascript': IconJavascript,
+  'mysql': IconMysql,
+  'nodedotjs': IconNodedotjs,
+  'postgresql': IconPostgresql,
+  'postman': IconPostman,
+  'python': IconPython,
+  'react': IconReact,
+  'sqlite': IconSqlite,
+  'tailwindcss': IconTailwindcss,
+  'typescript': IconTypescript,
+};
+
+const IconComponent = iconMap[key];
+---
+{IconComponent ? (
+  <IconComponent class={className} color={color} />
+) : (
+  <img src={name} alt="" class={className} />
+)}

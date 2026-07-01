@@ -1,0 +1,41 @@
+---
+// Component for showing profile photos in the About Me section
+---
+
+<section 
+  class="flex-1 min-w-0 h-[calc(100vh-64px)] md:h-full overflow-y-scroll no-scrollbar scroll-smooth flex flex-col-reverse" 
+  id="profile-images-column"
+>
+  <div class="w-full h-auto relative flex flex-col gap-[20px] pb-16 md:pb-24 first:pb-0 first:border-b-0 border-b border-border-custom md:border-b-0 pt-4">
+    <div class="relative overflow-hidden w-full group/img">
+      <img 
+        src="/perfil/perfil3.jpg" 
+        alt="Michael - Foto de perfil 3" 
+        class="w-full h-auto block"
+        loading="lazy"
+      />
+    </div>
+  </div>
+
+  <div class="w-full h-auto relative flex flex-col gap-[20px] pb-16 md:pb-24 border-b border-border-custom md:border-b-0 pt-4">
+    <div class="relative overflow-hidden w-full group/img">
+      <img 
+        src="/perfil/perfil2.jpg" 
+        alt="Michael - Foto de perfil 2" 
+        class="w-full h-auto block"
+        loading="lazy"
+      />
+    </div>
+  </div>
+
+  <div class="w-full h-auto relative flex flex-col gap-[20px] pb-16 md:pb-24 border-b border-border-custom md:border-b-0 pt-4">
+    <div class="relative overflow-hidden w-full group/img">
+      <img 
+        src="/perfil/perfil.jpg" 
+        alt="Michael - Foto de perfil" 
+        class="w-full h-auto block"
+        loading="eager"
+      />
+    </div>
+  </div>
+</section>

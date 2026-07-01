@@ -1,0 +1,169 @@
+---
+const pathname = Astro.url.pathname;
+const cleanPath = pathname.replace(/\/$/, "");
+
+const isActive = (path: string) => {
+  if (path === "/") {
+    return cleanPath === "" || cleanPath === "/index.html";
+  }
+  return cleanPath === path;
+};
+---
+
+<!-- DESKTOP MENU OVERLAY (Responsive) -->
+<div
+  id="desktop-menu-overlay"
+  class="fixed inset-0 z-50 flex flex-col md:flex-row bg-bg-primary/95 backdrop-blur-2xl border-r border-border-custom/10 transform -translate-x-full transition-transform duration-500 ease-in-out font-sans overflow-y-auto no-scrollbar"
+>
+  <!-- Left Panel (w-full on mobile, 65% on desktop) -->
+  <div
+    id="desktop-menu-left"
+    class="w-full md:w-[65%] p-8 md:p-16 flex flex-col justify-between border-b md:border-b-0 md:border-r border-border-custom/10 relative"
+  >
+    <div class="relative z-10">
+      <!-- Logo -->
+      <a
+        href="/"
+        class="block text-6xl md:text-[calc(100px*var(--font-scale-factor,1))] leading-[0.85] font-bold tracking-tighter font-display mb-10 md:mb-16 select-none hover:opacity-80 transition-opacity"
+      >
+        MickFree
+      </a>
+
+      <!-- Navigation Links -->
+      <nav
+        class="flex flex-col gap-x-16 gap-y-6 md:gap-y-8 text-4xl md:text-5xl lg:text-7xl font-bold font-display tracking-tight mt-8 md:mt-12"
+      >
+        <a
+          href="/"
+          class={`desktop-menu-overlay-link transition-all duration-300 hover:scale-[1.02] ${isActive("/") ? "text-text-primary" : "text-text-secondary hover:text-text-primary"}`}
+          data-section="projects">Proyectos</a
+        >
+        <a
+          href="/about"
+          class={`desktop-menu-overlay-link transition-all duration-300 hover:scale-[1.02] ${isActive("/about") ? "text-text-primary" : "text-text-secondary hover:text-text-primary"}`}
+          data-section="about">Sobre Mí</a
+        >
+        <a
+          href="/stack"
+          class={`desktop-menu-overlay-link transition-all duration-300 hover:scale-[1.02] ${isActive("/stack") ? "text-text-primary" : "text-text-secondary hover:text-text-primary"}`}
+          data-section="stack">Stack</a
+        >
+        <a
+          href="/experience"
+          class={`desktop-menu-overlay-link transition-all duration-300 hover:scale-[1.02] ${isActive("/experience") ? "text-text-primary" : "text-text-secondary hover:text-text-primary"}`}
+          data-section="experience">Experiencia</a
+        >
+        <a
+          href="/contact"
+          class={`desktop-menu-overlay-link transition-all duration-300 hover:scale-[1.02] ${isActive("/contact") ? "text-text-primary" : "text-text-secondary hover:text-text-primary"}`}
+          data-section="contact">Contacto</a
+        >
+      </nav>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="flex items-center gap-8 mt-12 md:mt-0 relative z-10">
+      <button
+        id="close-desktop-menu-btn"
+        class="px-6 py-2.5 rounded-full border border-border-custom bg-bg-secondary/40 text-[calc(10px*var(--font-scale-factor,1))] tracking-widest uppercase hover:bg-text-primary hover:text-bg-primary hover:border-text-primary transition-all duration-300 cursor-pointer font-medium"
+      >
+        Cerrar
+      </button>
+
+      <!-- Premium Switch Theme Toggle inside overlay -->
+      <button
+        id="overlay-theme-toggle-switch"
+        aria-label="Toggle Theme"
+        class="relative w-14 h-7 rounded-full border border-border-custom bg-bg-secondary p-1 flex items-center cursor-pointer transition-all hover:border-text-secondary"
+      >
+        <span
+          class="theme-switch-dot w-5 h-5 rounded-full bg-text-primary transition-transform duration-300 transform translate-x-0"
+        ></span>
+      </button>
+    </div>
+
+    <div class="hidden lg:flex absolute right-4 xl:right-8 -bottom-0 w-[55%] xl:w-[65%] h-[100%] items-center justify-center pointer-events-none select-none z-0">
+      <img
+        src="/images/people_01x2.webp"
+        alt="People Illustration"
+        class="w-full h-full object-contain"
+      />
+    </div>
+  </div>
+
+  <!-- Right Panel (w-full on mobile, 35% on desktop) -->
+  <div
+    id="desktop-menu-right"
+    class="w-full md:w-[35%] p-8 md:p-16 flex flex-col justify-between gap-12 md:gap-0 relative pb-16 md:pb-16"
+  >
+    <!-- Floating circular close button on the far right edge (hidden on mobile) -->
+    <button
+      id="floating-close-btn"
+      class="hidden md:flex absolute right-12 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-border-custom bg-bg-primary items-center justify-center text-text-primary hover:bg-text-primary hover:text-bg-primary transition-all duration-300 cursor-pointer shadow-md z-50"
+      aria-label="Cerrar Menú"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <div class="mt-4 md:mt-0">
+      <span
+        class="text-[calc(12px*var(--font-scale-factor,1))] uppercase tracking-widest font-semibold text-text-secondary block mb-1"
+        >Desarrollo de Software</span
+      >
+      <span class="text-base font-medium text-text-primary"
+        >Michael — Arequipa, Perú</span
+      >
+    </div>
+
+    <div class="flex flex-col gap-10">
+      <div>
+        <span
+          class="text-[calc(12px*var(--font-scale-factor,1))] uppercase tracking-widest font-semibold text-text-secondary block mb-2"
+          >Mensaje Directo</span
+        >
+        <a
+          href="mailto:lydoived@gmail.com"
+          class="text-sm font-medium text-text-primary hover:underline"
+          >lydoived@gmail.com</a
+        >
+      </div>
+
+      <div>
+        <span
+          class="text-[calc(12px*var(--font-scale-factor,1))] uppercase tracking-widest font-semibold text-text-secondary block mb-3"
+          >Redes de Estudio</span
+        >
+        <div class="flex flex-col gap-2.5">
+          <a
+            href="#"
+            class="text-sm font-medium text-text-primary hover:text-text-secondary transition-colors"
+            >LinkedIn — Michael Luna</a
+          >
+          <a
+            href="#"
+            class="text-sm font-medium text-text-primary hover:text-text-secondary transition-colors"
+            >GitHub — mickfree</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 md:mt-0">
+      <p class="text-[calc(12px*var(--font-scale-factor,1))] text-text-secondary tracking-wide">
+        © MickFree. Todos los derechos reservados.
+      </p>
+    </div>
+  </div>
+</div>

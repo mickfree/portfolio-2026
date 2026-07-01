@@ -1,0 +1,194 @@
+---
+// Component for the details and form column of the Contact section
+---
+
+<aside class="relative flex-1 w-full h-full p-8 md:p-12 flex flex-col justify-between overflow-y-auto no-scrollbar font-sans bg-bg-primary">
+  <div class="flex-1 flex flex-col justify-start pt-4">
+    <!-- Header -->
+    <div class="flex justify-between items-center text-[calc(18px*var(--font-scale-factor,1))] text-text-secondary uppercase tracking-widest mb-8 border-b border-border-custom/50 pb-2">
+      <span>Mensaje Directo</span>
+      <span class="font-mono">lydoived@gmail.com</span>
+    </div>
+
+    <div class="w-full xl:max-w-[600px] flex flex-col justify-start">
+      <span class="text-xs uppercase tracking-wider text-text-secondary font-medium block mb-2">
+        Contacto de Estudio
+      </span>
+      
+      <h2 class="text-4xl font-bold tracking-tight mb-8 font-display text-text-primary leading-[1.1]">
+        INICIAR UN PROYECTO.
+      </h2>
+
+      <!-- Form Container -->
+      <div id="contact-form-container" class="w-full transition-all duration-300">
+        <form id="portfolio-contact-form" class="flex flex-col gap-8 w-full max-w-[550px]">
+          <div class="relative group">
+            <input
+              type="text"
+              id="form-name"
+              name="name"
+              required
+              placeholder=" "
+              class="peer w-full bg-transparent border-b border-border-custom py-3 text-base text-text-primary focus:outline-none focus:border-text-primary transition-colors duration-300 placeholder-transparent"
+            />
+            <label
+              for="form-name"
+              class="absolute left-0 top-3 text-sm text-text-secondary uppercase tracking-wider transition-all duration-300 pointer-events-none origin-left
+                     peer-placeholder-shown:text-sm peer-placeholder-shown:top-3
+                     peer-focus:text-xs peer-focus:top-[-12px] peer-focus:text-text-primary
+                     peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-[-12px] peer-[:not(:placeholder-shown)]:text-text-primary"
+            >
+              Tu Nombre / Empresa
+            </label>
+          </div>
+
+          <div class="relative group">
+            <input
+              type="email"
+              id="form-email"
+              name="email"
+              required
+              placeholder=" "
+              class="peer w-full bg-transparent border-b border-border-custom py-3 text-base text-text-primary focus:outline-none focus:border-text-primary transition-colors duration-300 placeholder-transparent"
+            />
+            <label
+              for="form-email"
+              class="absolute left-0 top-3 text-sm text-text-secondary uppercase tracking-wider transition-all duration-300 pointer-events-none origin-left
+                     peer-placeholder-shown:text-sm peer-placeholder-shown:top-3
+                     peer-focus:text-xs peer-focus:top-[-12px] peer-focus:text-text-primary
+                     peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-[-12px] peer-[:not(:placeholder-shown)]:text-text-primary"
+            >
+              Tu Email
+            </label>
+          </div>
+
+          <div class="relative group mt-2">
+            <textarea
+              id="form-message"
+              name="message"
+              required
+              rows="3"
+              placeholder=" "
+              class="peer w-full bg-transparent border-b border-border-custom py-3 text-base text-text-primary focus:outline-none focus:border-text-primary transition-colors duration-300 resize-none placeholder-transparent"
+            ></textarea>
+            <label
+              for="form-message"
+              class="absolute left-0 top-3 text-sm text-text-secondary uppercase tracking-wider transition-all duration-300 pointer-events-none origin-left
+                     peer-placeholder-shown:text-sm peer-placeholder-shown:top-3
+                     peer-focus:text-xs peer-focus:top-[-12px] peer-focus:text-text-primary
+                     peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:top-[-12px] peer-[:not(:placeholder-shown)]:text-text-primary"
+            >
+              Cuéntanos sobre el proyecto
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            class="mt-4 w-full md:w-auto self-start px-8 py-3.5 rounded-full bg-text-primary text-bg-primary font-semibold text-sm uppercase tracking-widest hover:bg-bg-secondary hover:text-text-primary hover:border hover:border-text-primary border border-transparent transition-all duration-300 cursor-pointer"
+          >
+            Enviar Solicitud
+          </button>
+        </form>
+      </div>
+
+      <!-- Success Message Container (Hidden by default) -->
+      <div id="contact-success-container" class="hidden flex-col gap-4 text-left py-12 max-w-[500px] fade-transition">
+        <div class="w-12 h-12 rounded-full border border-text-primary flex items-center justify-center text-text-primary text-xl font-bold mb-2">
+          ✓
+        </div>
+        <h3 class="text-2xl font-bold tracking-tight font-display text-text-primary">¡MENSAJE RECIBIDO CON ÉXITO!</h3>
+        <p class="text-xs text-text-secondary leading-relaxed">
+          Gracias por contactar con Michael. Nos pondremos en contacto contigo en las próximas 24 horas para responder a tu solicitud.
+        </p>
+        <button
+          id="btn-reset-form"
+          type="button"
+          class="mt-4 px-6 py-2.5 rounded-full border border-border-custom text-xs uppercase tracking-widest hover:border-text-primary transition-all cursor-pointer text-text-secondary hover:text-text-primary"
+        >
+          Enviar otro mensaje
+        </button>
+      </div>
+    </div>
+
+    <!-- Decorative Illustration aligned absolutely to the bottom-right edge -->
+    <div class="hidden xl:block absolute bottom-0 right-0 max-w-[675px] w-auto h-auto pointer-events-none select-none z-10">
+      <img
+        src="/images/people_02x2.webp"
+        alt="Ilustración de Contacto"
+        class="w-full h-auto max-h-[720px] block object-contain object-bottom drop-shadow-xl"
+      />
+    </div></div>
+</aside>
+
+<script>
+  function initContactForm() {
+    const pills = document.querySelectorAll('.project-pill');
+    const inputType = document.getElementById('form-project-type') as HTMLInputElement;
+
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('active', 'border-text-primary', 'bg-text-primary', 'text-bg-primary'));
+        pill.classList.add('active');
+        const val = pill.getAttribute('data-value') || 'Branding';
+        if (inputType) inputType.value = val;
+      });
+    });
+
+    const form = document.getElementById('portfolio-contact-form');
+    const formContainer = document.getElementById('contact-form-container');
+    const successContainer = document.getElementById('contact-success-container');
+    const btnReset = document.getElementById('btn-reset-form');
+
+    if (form && formContainer && successContainer) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Premium submit flow
+        formContainer.classList.add('opacity-0', 'translate-y-4');
+        setTimeout(() => {
+          formContainer.classList.add('hidden');
+          successContainer.classList.remove('hidden');
+          // force reflow
+          void successContainer.offsetWidth;
+          successContainer.classList.remove('opacity-0', 'translate-y-4');
+        }, 300);
+      });
+    }
+
+    if (btnReset && formContainer && successContainer && form) {
+      btnReset.addEventListener('click', () => {
+        const f = form as HTMLFormElement;
+        f.reset();
+        
+        // Reset pills
+        pills.forEach((p, idx) => {
+          p.classList.remove('active');
+          if (idx === 0) {
+            p.classList.add('active');
+            if (inputType) inputType.value = p.getAttribute('data-value') || 'Branding';
+          }
+        });
+
+        successContainer.classList.add('opacity-0', 'translate-y-4');
+        setTimeout(() => {
+          successContainer.classList.add('hidden');
+          formContainer.classList.remove('hidden');
+          void formContainer.offsetWidth;
+          formContainer.classList.remove('opacity-0', 'translate-y-4');
+        }, 300);
+      });
+    }
+  }
+
+  // Init contact logic
+  initContactForm();
+  document.addEventListener('astro:after-swap', initContactForm);
+</script>
+
+<style>
+  .project-pill.active {
+    border-color: var(--text-primary);
+    background-color: var(--text-primary);
+    color: var(--bg-primary);
+  }
+</style>

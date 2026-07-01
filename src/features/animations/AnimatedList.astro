@@ -1,0 +1,145 @@
+---
+// src/features/animations/AnimatedList.astro
+interface Props {
+  list: string[];
+  interval?: number;
+  class?: string;
+}
+
+const { list = [], interval = 1000, class: className = "" } = Astro.props;
+---
+
+<span
+  class={`animated-list-container ${className}`}
+  data-interval={interval}
+>
+  {
+    list && list.length > 0 ? (
+      list.map((item, idx) => (
+        <span
+          class={`animated-list-item ${
+            idx === 0 ? "active" : ""
+          }`}
+          data-index={idx}
+        >
+          {item}
+        </span>
+      ))
+    ) : null
+  }
+</span>
+
+<style>
+  .animated-list-container {
+    display: inline-flex;
+    position: relative;
+    overflow: hidden;
+    vertical-align: baseline;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animated-list-item {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(-100%);
+    pointer-events: none;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .animated-list-item.active {
+    position: relative;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  
+  .animated-list-item.leaving {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    transform: translateY(100%);
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  function initAnimatedLists() {
+    const containers = document.querySelectorAll(".animated-list-container");
+
+    containers.forEach((containerEl) => {
+      const container = containerEl as HTMLElement;
+      if (container.getAttribute("data-initialized")) return;
+      container.setAttribute("data-initialized", "true");
+
+      const items = container.querySelectorAll(".animated-list-item");
+      const interval = parseInt(
+        container.getAttribute("data-interval") || "3000",
+        10,
+      );
+      if (items.length === 0) return;
+
+      let currentIndex = 0;
+
+      const updateDimensions = () => {
+        const activeItem = container.querySelector(".animated-list-item.active") as HTMLElement | null;
+        if (activeItem) {
+          container.style.width = `${activeItem.offsetWidth}px`;
+          container.style.height = `${activeItem.offsetHeight}px`;
+        }
+      };
+
+      // Set initial dimensions
+      updateDimensions();
+
+      // Recalculate once fonts are fully loaded
+      if (document.fonts) {
+        document.fonts.ready.then(() => {
+          if (container.isConnected) {
+            updateDimensions();
+          }
+        });
+      }
+
+      // Handle window resizing and clean up event listener if element is removed from DOM
+      const resizeHandler = () => {
+        if (!container.isConnected) {
+          window.removeEventListener("resize", resizeHandler);
+          return;
+        }
+        updateDimensions();
+      };
+      window.addEventListener("resize", resizeHandler);
+
+      if (items.length <= 1) return;
+
+      setInterval(() => {
+        if (!container.isConnected) return;
+
+        const currentItem = items[currentIndex];
+        const nextIndex = (currentIndex + 1) % items.length;
+        const nextItem = items[nextIndex];
+
+        // Start transitions
+        currentItem.classList.remove("active");
+        currentItem.classList.add("leaving");
+        nextItem.classList.add("active");
+
+        // Immediately update container size to match the new active item
+        updateDimensions();
+
+        // Clean up leaving class after transition completes
+        setTimeout(() => {
+          currentItem.classList.remove("leaving");
+        }, 300); // matching 0.3s transition
+
+        currentIndex = nextIndex;
+      }, interval);
+    });
+  }
+
+  document.addEventListener("astro:page-load", initAnimatedLists);
+</script>

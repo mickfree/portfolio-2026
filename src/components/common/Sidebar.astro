@@ -1,0 +1,98 @@
+---
+import MobileHeader from "./sidebar/MobileHeader.astro";
+import DesktopOverlay from "./sidebar/DesktopOverlay.astro";
+import DesktopSidebar from "./sidebar/DesktopSidebar.astro";
+---
+
+<MobileHeader />
+<DesktopOverlay />
+<DesktopSidebar />
+
+<script>
+  function initSidebar() {
+    // --- Desktop Menu Toggle (Overlay) ---
+    const desktopMenuOverlay = document.getElementById("desktop-menu-overlay");
+    const desktopMenuBtn = document.getElementById("menu-btn-desktop");
+    const closeDesktopMenuBtn = document.getElementById(
+      "close-desktop-menu-btn",
+    );
+    const floatingCloseBtn = document.getElementById("floating-close-btn");
+    const desktopOverlayLinks = document.querySelectorAll(
+      ".desktop-menu-overlay-link",
+    );
+
+    function openDesktopMenu() {
+      if (desktopMenuOverlay) {
+        desktopMenuOverlay.classList.remove("-translate-x-full");
+        desktopMenuOverlay.classList.add("translate-x-0");
+      }
+    }
+
+    function closeDesktopMenu() {
+      if (desktopMenuOverlay) {
+        desktopMenuOverlay.classList.remove("translate-x-0");
+        desktopMenuOverlay.classList.add("-translate-x-full");
+      }
+    }
+
+    if (desktopMenuBtn) {
+      desktopMenuBtn.addEventListener("click", openDesktopMenu);
+    }
+
+    const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener("click", openDesktopMenu);
+    }
+
+    if (closeDesktopMenuBtn) {
+      closeDesktopMenuBtn.addEventListener("click", closeDesktopMenu);
+    }
+
+    if (floatingCloseBtn) {
+      floatingCloseBtn.addEventListener("click", closeDesktopMenu);
+    }
+
+    if (desktopMenuOverlay) {
+      desktopMenuOverlay.addEventListener("click", (e) => {
+        if (e.target === desktopMenuOverlay) {
+          closeDesktopMenu();
+        }
+      });
+    }
+
+    desktopOverlayLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        closeDesktopMenu();
+      });
+    });
+
+    // --- Theme Switch Toggle Handler ---
+    const htmlEl = document.documentElement;
+    const desktopToggle = document.getElementById("theme-toggle-switch");
+    const mobileToggle = document.getElementById("mobile-theme-toggle");
+    const overlayToggle = document.getElementById(
+      "overlay-theme-toggle-switch",
+    );
+
+    function toggleTheme() {
+      const activeTheme = htmlEl.getAttribute("data-theme") || "dark";
+      const nextTheme = activeTheme === "dark" ? "light" : "dark";
+
+      htmlEl.setAttribute("data-theme", nextTheme);
+      localStorage.setItem("theme", nextTheme);
+    }
+
+    if (desktopToggle) {
+      desktopToggle.addEventListener("click", toggleTheme);
+    }
+    if (mobileToggle) {
+      mobileToggle.addEventListener("click", toggleTheme);
+    }
+    if (overlayToggle) {
+      overlayToggle.addEventListener("click", toggleTheme);
+    }
+  }
+
+  // Initialize
+  document.addEventListener("astro:page-load", initSidebar);
+</script>
