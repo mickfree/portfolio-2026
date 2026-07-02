@@ -6,7 +6,7 @@
 @font-face {
   font-family: 'Futura Display';
   src: url('/fonts/Futura Display.ttf') format('truetype');
-  font-weight: normal;
+  font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
