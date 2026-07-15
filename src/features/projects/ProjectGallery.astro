@@ -69,7 +69,8 @@ const projectsWithResolvedImages = await Promise.all(
 );
 ---
 
-<section class="flex-1 min-w-0 h-[calc(100vh-64px)] md:h-full overflow-y-scroll no-scrollbar scroll-smooth" id="images-column">
+<div class="relative flex-1 min-w-0 h-[calc(100vh-64px)] md:h-full flex flex-col" id="images-column-container">
+  <section class="w-full h-full overflow-y-scroll no-scrollbar scroll-smooth" id="images-column">
   {projectsWithResolvedImages.map((project) => (
     <div 
       class="project-slide w-full h-auto relative flex flex-col gap-[20px] pb-16 md:pb-24 last:pb-0 border-b border-border-custom md:border-b-0 pt-4"
@@ -162,4 +163,63 @@ const projectsWithResolvedImages = await Promise.all(
     </div>
   ))}
   
-</section>
+  </section>
+
+  <!-- Scroll Indicator -->
+  <div id="scroll-indicator" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 pointer-events-none z-30 transition-all duration-500 ease-out">
+    <div class="w-[26px] h-[40px] border-2 border-border-custom/50 dark:border-black rounded-full flex justify-center p-1.5 bg-black dark:bg-[#fcfcfc]">
+      <div class="w-1 h-2 bg-white dark:bg-black rounded-full animate-scroll-dot"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes scroll-dot {
+    0% {
+      transform: translateY(0);
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    80% {
+      transform: translateY(14px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(14px);
+      opacity: 0;
+    }
+  }
+
+  .animate-scroll-dot {
+    animation: scroll-dot 2s cubic-bezier(0.15, 0.41, 0.69, 0.94) infinite;
+  }
+</style>
+
+<script>
+  function initScrollIndicator() {
+    const imagesCol = document.getElementById("images-column");
+    const scrollIndicator = document.getElementById("scroll-indicator");
+    
+    if (imagesCol && scrollIndicator) {
+      // Reset indicator state initially
+      scrollIndicator.classList.remove("opacity-0", "translate-y-2", "pointer-events-none");
+      
+      const handleScroll = () => {
+        if (imagesCol.scrollTop > 50) {
+          scrollIndicator.classList.add("opacity-0", "translate-y-2", "pointer-events-none");
+        } else {
+          scrollIndicator.classList.remove("opacity-0", "translate-y-2", "pointer-events-none");
+        }
+      };
+      
+      imagesCol.addEventListener("scroll", handleScroll, { passive: true });
+    }
+  }
+
+  // Run on first load
+  initScrollIndicator();
+  // Run on page transition (Astro View Transitions)
+  document.addEventListener("astro:page-load", initScrollIndicator);
+</script>
