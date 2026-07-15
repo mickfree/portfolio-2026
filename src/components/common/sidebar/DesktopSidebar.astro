@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import people03x2Image from '@/assets/images/people_03x2.webp';
+
 const pathname = Astro.url.pathname;
 const cleanPath = pathname.replace(/\/$/, "");
 
@@ -81,8 +84,8 @@ const isActive = (path: string) => {
 
   <div class="relative w-full mt-auto">
     <div class="w-full overflow-hidden mb-[-2rem] flex justify-center items-end">
-      <img
-        src="/images/people_03x2.webp"
+      <Image
+        src={people03x2Image}
         alt="People"
         class="w-[180%] min-w-[180%] h-auto block"
         loading="lazy"

@@ -1,6 +1,8 @@
 ---
 import { categories } from "@/data/categories"
 import TechIcon from "@/components/icons/astro/logos/TechIcon.astro"
+import { Image } from 'astro:assets';
+import people03Image from '@/assets/images/people_03.png';
 ---
 
 <aside
@@ -45,8 +47,8 @@ import TechIcon from "@/components/icons/astro/logos/TechIcon.astro"
   </div>
 
   <div class="hidden lg:block absolute -top-16 right-0 max-w-[280px] xl:max-w-[560px] w-auto h-auto pointer-events-none select-none z-10">
-    <img
-      src="/images/people_03.png"
+    <Image
+      src={people03Image}
       alt="Ilustración de Stack"
       class="w-full h-auto block object-contain object-top drop-shadow-xl"
     />

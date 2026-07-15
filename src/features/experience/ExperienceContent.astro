@@ -1,5 +1,7 @@
 ---
 import { experiences } from "@/data/experiences";
+import { Image } from 'astro:assets';
+import frogImage from '@/assets/images/frog_01.webp';
 ---
 
 <aside
@@ -48,8 +50,8 @@ import { experiences } from "@/data/experiences";
   <div
     class="hidden md:block absolute -bottom-16 right-0 max-w-[120px] lg:max-w-[400px] w-auto h-auto pointer-events-none select-none z-0"
   >
-    <img
-      src="/images/frog_01.webp"
+    <Image
+      src={frogImage}
       alt="Frog Illustration"
       class="w-full h-auto block object-contain object-bottom drop-shadow-lg"
     />

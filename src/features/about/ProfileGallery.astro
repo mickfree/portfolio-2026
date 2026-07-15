@@ -1,5 +1,9 @@
 ---
 // Component for showing profile photos in the About Me section
+import { Image } from 'astro:assets';
+import perfilImage from '@/assets/perfil/perfil.jpg';
+import perfil2Image from '@/assets/perfil/perfil2.jpg';
+import perfil3Image from '@/assets/perfil/perfil3.jpg';
 ---
 
 <section 
@@ -8,8 +12,8 @@
 >
   <div class="w-full h-auto relative flex flex-col gap-[20px] pb-16 md:pb-24 first:pb-0 first:border-b-0 border-b border-border-custom md:border-b-0 pt-4">
     <div class="relative overflow-hidden w-full group/img">
-      <img 
-        src="/perfil/perfil3.jpg" 
+      <Image 
+        src={perfil3Image} 
         alt="Michael - Foto de perfil 3" 
         class="w-full h-auto block"
         loading="lazy"
@@ -19,8 +23,8 @@
 
   <div class="w-full h-auto relative flex flex-col gap-[20px] pb-16 md:pb-24 border-b border-border-custom md:border-b-0 pt-4">
     <div class="relative overflow-hidden w-full group/img">
-      <img 
-        src="/perfil/perfil2.jpg" 
+      <Image 
+        src={perfil2Image} 
         alt="Michael - Foto de perfil 2" 
         class="w-full h-auto block"
         loading="lazy"
@@ -30,8 +34,8 @@
 
   <div class="w-full h-auto relative flex flex-col gap-[20px] pb-16 md:pb-24 border-b border-border-custom md:border-b-0 pt-4">
     <div class="relative overflow-hidden w-full group/img">
-      <img 
-        src="/perfil/perfil.jpg" 
+      <Image 
+        src={perfilImage} 
         alt="Michael - Foto de perfil" 
         class="w-full h-auto block"
         loading="eager"

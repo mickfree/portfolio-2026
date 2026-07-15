@@ -1,6 +1,8 @@
 ---
 import DetailSection from "@/components/common/DetailSection.astro";
 import TechIcon from "@/components/icons/astro/logos/TechIcon.astro";
+import { Image } from 'astro:assets';
+import sirenImage from "@/assets/images/siren_01.webp";
 
 interface Stack {
   name: string;
@@ -85,8 +87,8 @@ const { projects } = Astro.props;
   </div>
   <!-- Decorative Frog Illustration aligned absolutely to the bottom-right edge -->
   <div class="hidden md:block absolute -bottom-4 right-0 max-w-[120px] lg:max-w-[700px] w-auto h-auto pointer-events-none select-none z-0">
-    <img
-      src="/images/siren_01.webp"
+    <Image
+      src={sirenImage}
       alt="Siren Illustration"
       class="w-full h-auto block object-contain object-bottom drop-shadow-lg"
     />

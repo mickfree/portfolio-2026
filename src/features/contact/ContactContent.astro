@@ -1,5 +1,7 @@
 ---
 // Component for the details and form column of the Contact section
+import { Image } from 'astro:assets';
+import people02Image from '@/assets/images/people_02x2.webp';
 const web3FormsKey = import.meta.env.WEB3FORMS_ACCESS_KEY || import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY;
 ---
 
@@ -120,8 +122,8 @@ const web3FormsKey = import.meta.env.WEB3FORMS_ACCESS_KEY || import.meta.env.PUB
 
     <!-- Decorative Illustration aligned absolutely to the bottom-right edge -->
     <div class="hidden xl:block absolute bottom-0 right-0 max-w-[675px] w-auto h-auto pointer-events-none select-none z-10">
-      <img
-        src="/images/people_02x2.webp"
+      <Image
+        src={people02Image}
         alt="Ilustración de Contacto"
         class="w-full h-auto max-h-[720px] block object-contain object-bottom drop-shadow-xl"
       />
