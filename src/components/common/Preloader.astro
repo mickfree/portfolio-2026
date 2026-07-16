@@ -21,6 +21,8 @@
 </style>
 
 <script>
+  import { gsap } from "gsap";
+
   function initPreloader() {
     const preloader = document.getElementById('preloader');
     const numberEl = document.getElementById('preloader-number');
@@ -36,16 +38,112 @@
     // Lock scrolling while preloading
     document.body.classList.add('overflow-hidden');
 
-    let current = 0;
-    let target = 0;
-    let imagesLoaded = 0;
+    const counter = { value: 0 };
     
+    // Create a timeline for the exit animation
+    const finishPreloading = () => {
+      if ((window as any).hasLoaded) return;
+      (window as any).hasLoaded = true;
+      
+      const tl = gsap.timeline({
+        onComplete: () => {
+          document.body.classList.remove('overflow-hidden');
+          preloader.remove();
+        }
+      });
+      
+      // Step 1: Scale down and fade out the number element
+      tl.to(numberEl, {
+        scale: 0.8,
+        opacity: 0,
+        duration: 0.4,
+        ease: "power2.inOut"
+      });
+      
+      // Step 2: Slide the preloader screen up
+      tl.to(preloader, {
+        yPercent: -100,
+        duration: 0.8,
+        ease: "power4.inOut"
+      }, "-=0.2");
+      
+      // Step 3: Stagger animate the elements on the page after preloader starts to slide up
+      const navLinks = document.querySelectorAll("#desktop-nav a");
+      const sidebarLogo = document.querySelector("aside a");
+      
+      if (sidebarLogo || navLinks.length > 0) {
+        const entryTl = gsap.timeline();
+        
+        // Hide elements initially
+        gsap.set(navLinks, { x: -20, opacity: 0 });
+        if (sidebarLogo) gsap.set(sidebarLogo, { y: -20, opacity: 0 });
+        
+        entryTl.to(sidebarLogo, {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: "power3.out"
+        }, "+=0.1");
+        
+        entryTl.to(navLinks, {
+          x: 0,
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: "power2.out"
+        }, "-=0.4");
+      }
+    };
+
+    // We animate from 0 to 90
+    const tween = gsap.to(counter, {
+      value: 90,
+      duration: 3,
+      ease: "power1.out",
+      onUpdate: () => {
+        numberEl.textContent = Math.floor(counter.value).toString();
+      }
+    });
+
+    const completeLoader = () => {
+      if ((window as any).hasLoaded) return;
+      // Kill the active tween to 90%
+      tween.kill();
+      // Tween remaining percentage to 100% quickly
+      gsap.to(counter, {
+        value: 100,
+        duration: 0.5,
+        ease: "power2.out",
+        onUpdate: () => {
+          numberEl.textContent = Math.floor(counter.value).toString();
+        },
+        onComplete: finishPreloading
+      });
+    };
+
     // Select all images currently in the document
     const images = Array.from(document.images);
     const totalImages = images.length;
+    let imagesLoaded = 0;
+
+    const onImageLoad = () => {
+      imagesLoaded++;
+      if (totalImages > 0) {
+        const progress = imagesLoaded / totalImages;
+        const currentProgress = tween.progress();
+        const targetProgress = progress * 0.9; // max 90% here
+        if (targetProgress > currentProgress) {
+          gsap.to(tween, {
+            progress: targetProgress,
+            duration: 0.3,
+            ease: "power1.out"
+          });
+        }
+      }
+    };
 
     if (totalImages === 0) {
-      target = 100;
+      completeLoader();
     } else {
       // Setup listener for each image
       images.forEach(img => {
@@ -58,49 +156,11 @@
       });
     }
 
-    function onImageLoad() {
-      imagesLoaded++;
-      if (totalImages > 0) {
-        // Increment target up to 90% depending on images loaded
-        target = Math.min(90, Math.round((imagesLoaded / totalImages) * 90));
-      }
-    }
-
     // Set target to 100% when everything is loaded
-    window.addEventListener('load', () => {
-      target = 100;
-    });
+    window.addEventListener('load', completeLoader);
 
-    // Fallback: force progress to 100% after 2.5 seconds in case of slow API calls or scripts
-    setTimeout(() => {
-      target = 100;
-    }, 2500);
-
-    // Animation interval loop
-    const interval = setInterval(() => {
-      if (current < target) {
-        // Ease-out step calculation
-        const step = Math.max(1, Math.ceil((target - current) * 0.1));
-        current = Math.min(target, current + step);
-        numberEl.textContent = String(current);
-      }
-
-      if (current >= 100) {
-        clearInterval(interval);
-        (window as any).hasLoaded = true;
-
-        // Start fade-out animation
-        preloader.classList.add('fade-out');
-
-        // Restore scrolling on the body
-        document.body.classList.remove('overflow-hidden');
-
-        // Remove from DOM after transition completes to keep it clean
-        setTimeout(() => {
-          preloader.remove();
-        }, 800);
-      }
-    }, 25);
+    // Fallback: force progress to 100% after 2.5 seconds
+    const fallbackTimeout = setTimeout(completeLoader, 2500);
   }
 
   // Initial execution

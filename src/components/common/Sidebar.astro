@@ -9,6 +9,8 @@ import DesktopSidebar from "./sidebar/DesktopSidebar.astro";
 <DesktopSidebar />
 
 <script>
+  import { gsap } from "gsap";
+
   function initSidebar() {
     // --- Desktop Menu Toggle (Overlay) ---
     const desktopMenuOverlay = document.getElementById("desktop-menu-overlay");
@@ -21,18 +23,111 @@ import DesktopSidebar from "./sidebar/DesktopSidebar.astro";
       ".desktop-menu-overlay-link",
     );
 
+    // Initialize overlay state using GSAP to avoid conflict with Tailwind classes
+    if (desktopMenuOverlay) {
+      desktopMenuOverlay.classList.remove(
+        "-translate-x-full",
+        "transition-transform",
+        "duration-500",
+        "ease-in-out"
+      );
+      gsap.set(desktopMenuOverlay, { xPercent: -100, visibility: "hidden" });
+    }
+
+    let menuTimeline: gsap.core.Timeline | null = null;
+
     function openDesktopMenu() {
-      if (desktopMenuOverlay) {
-        desktopMenuOverlay.classList.remove("-translate-x-full");
-        desktopMenuOverlay.classList.add("translate-x-0");
-      }
+      if (!desktopMenuOverlay) return;
+
+      if (menuTimeline) menuTimeline.kill();
+
+      menuTimeline = gsap.timeline();
+
+      // Show overlay container and animate slide-in
+      menuTimeline.set(desktopMenuOverlay, { visibility: "visible" });
+      menuTimeline.to(desktopMenuOverlay, {
+        xPercent: 0,
+        duration: 0.6,
+        ease: "power3.out"
+      });
+
+      // Target children elements for animation
+      const logo = desktopMenuOverlay.querySelector("#desktop-menu-left a");
+      const navLinks = desktopMenuOverlay.querySelectorAll(".desktop-menu-overlay-link");
+      const controls = desktopMenuOverlay.querySelector("#desktop-menu-left .flex");
+      const rightPanelItems = desktopMenuOverlay.querySelectorAll("#desktop-menu-right > div");
+
+      // Reset nested elements to initial hidden state
+      gsap.set(logo, { x: -30, opacity: 0 });
+      gsap.set(navLinks, { x: -40, opacity: 0 });
+      if (controls) gsap.set(controls, { y: 15, opacity: 0 });
+      gsap.set(rightPanelItems, { y: 20, opacity: 0 });
+
+      // Stagger items in
+      menuTimeline.to(logo, {
+        x: 0,
+        opacity: 1,
+        duration: 0.4,
+        ease: "power2.out"
+      }, "-=0.3");
+
+      menuTimeline.to(navLinks, {
+        x: 0,
+        opacity: 1,
+        duration: 0.4,
+        stagger: 0.05,
+        ease: "power2.out"
+      }, "-=0.2");
+
+      const rightItemsArray = Array.from(rightPanelItems);
+      const bottomGroup = controls ? [controls, ...rightItemsArray] : rightItemsArray;
+
+      menuTimeline.to(bottomGroup, {
+        y: 0,
+        opacity: 1,
+        duration: 0.5,
+        stagger: 0.05,
+        ease: "power2.out"
+      }, "-=0.3");
     }
 
     function closeDesktopMenu() {
-      if (desktopMenuOverlay) {
-        desktopMenuOverlay.classList.remove("translate-x-0");
-        desktopMenuOverlay.classList.add("-translate-x-full");
-      }
+      if (!desktopMenuOverlay) return;
+
+      if (menuTimeline) menuTimeline.kill();
+
+      menuTimeline = gsap.timeline({
+        onComplete: () => {
+          gsap.set(desktopMenuOverlay, { visibility: "hidden" });
+        }
+      });
+
+      const logo = desktopMenuOverlay.querySelector("#desktop-menu-left a");
+      const navLinks = desktopMenuOverlay.querySelectorAll(".desktop-menu-overlay-link");
+      const controls = desktopMenuOverlay.querySelector("#desktop-menu-left .flex");
+      const rightPanelItems = desktopMenuOverlay.querySelectorAll("#desktop-menu-right > div");
+
+      const itemsArray = [
+        ...Array.from(navLinks),
+        logo,
+        controls,
+        ...Array.from(rightPanelItems)
+      ].filter(Boolean);
+
+      // Animate contents out quickly
+      menuTimeline.to(itemsArray, {
+        opacity: 0,
+        duration: 0.25,
+        stagger: 0.02,
+        ease: "power2.in"
+      });
+
+      // Slide overlay container back
+      menuTimeline.to(desktopMenuOverlay, {
+        xPercent: -100,
+        duration: 0.5,
+        ease: "power3.inOut"
+      }, "-=0.15");
     }
 
     if (desktopMenuBtn) {

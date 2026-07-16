@@ -16,7 +16,7 @@ const isActive = (path: string) => {
 <!-- DESKTOP MENU OVERLAY (Responsive) -->
 <div
   id="desktop-menu-overlay"
-  class="fixed inset-0 z-50 flex flex-col md:flex-row bg-bg-primary/95 backdrop-blur-2xl border-r border-border-custom/10 transform -translate-x-full transition-transform duration-500 ease-in-out font-sans overflow-y-auto no-scrollbar"
+  class="fixed inset-0 z-50 flex flex-col md:flex-row bg-bg-primary/95 backdrop-blur-2xl border-r border-border-custom/10 transform -translate-x-full font-sans overflow-y-auto no-scrollbar"
 >
   <!-- Left Panel (w-full on mobile, 65% on desktop) -->
   <div
@@ -65,7 +65,7 @@ const isActive = (path: string) => {
     </div>
 
     <!-- Bottom Controls -->
-    <div class="flex items-center gap-8 mt-12 md:mt-0 relative z-10">
+    <div class="flex items-center gap-24 mt-12 -left-8 -bottom-8 md:mt-0 relative z-10">
       <button
         id="close-desktop-menu-btn"
         class="px-6 py-2.5 rounded-full border border-border-custom bg-bg-secondary/40 text-[calc(10px*var(--font-scale-factor,1))] tracking-widest uppercase hover:bg-text-primary hover:text-bg-primary hover:border-text-primary transition-all duration-300 cursor-pointer font-medium"

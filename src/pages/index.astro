@@ -84,6 +84,8 @@ import { projects } from "@/data/proyects";
 </style>
 
 <script>
+	import { gsap } from "gsap";
+
 	function initProjectsPage() {
 		// 1. Observer for Sidebar Details
 		const slides = document.querySelectorAll(".project-slide");
@@ -93,6 +95,16 @@ import { projects } from "@/data/proyects";
 
 		if (slides.length > 0 && detailCards.length > 0 && imagesCol) {
 			let currentActiveId = "1";
+
+			// Initialize cards: hide all except the first one
+			detailCards.forEach((card) => {
+				const cardId = card.getAttribute("data-project-details-id");
+				if (cardId === currentActiveId) {
+					gsap.set(card, { opacity: 1, y: 0, visibility: "visible", pointerEvents: "auto" });
+				} else {
+					gsap.set(card, { opacity: 0, y: 15, visibility: "hidden", pointerEvents: "none" });
+				}
+			});
 
 			const observerOptions = {
 				root: imagesCol,
@@ -106,19 +118,73 @@ import { projects } from "@/data/proyects";
 						const projectId =
 							entry.target.getAttribute("data-project-id");
 						if (projectId && projectId !== currentActiveId) {
+							const prevActiveId = currentActiveId;
 							currentActiveId = projectId;
 
-							// Actualizar la tarjeta de detalle activa
-							detailCards.forEach((card) => {
-								const cardId = card.getAttribute(
-									"data-project-details-id",
+							const prevCard = document.querySelector(`.project-details-card[data-project-details-id="${prevActiveId}"]`);
+							const nextCard = document.querySelector(`.project-details-card[data-project-details-id="${currentActiveId}"]`);
+
+							// Transition OUT previous active card
+							if (prevCard) {
+								gsap.to(prevCard, {
+									opacity: 0,
+									y: -15,
+									duration: 0.3,
+									ease: "power2.in",
+									onComplete: () => {
+										gsap.set(prevCard, { visibility: "hidden", pointerEvents: "none" });
+									}
+								});
+							}
+
+							// Transition IN next active card
+							if (nextCard) {
+								gsap.killTweensOf(nextCard);
+								gsap.set(nextCard, { visibility: "visible", pointerEvents: "auto" });
+								
+								// Animate card container
+								gsap.fromTo(nextCard,
+									{ opacity: 0, y: 15 },
+									{ opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
 								);
-								if (cardId === currentActiveId) {
-									card.classList.remove("fade-out");
-								} else {
-									card.classList.add("fade-out");
+
+								// Select sub-elements to stagger
+								const category = nextCard.querySelector("span.text-xl");
+								const title = nextCard.querySelector("h2");
+								const description = nextCard.querySelector("p");
+								const techIcons = nextCard.querySelectorAll("div.flex-wrap > div");
+
+								if (category || title || description || techIcons.length > 0) {
+									const innerTl = gsap.timeline();
+									
+									// Set initial states
+									if (category) gsap.set(category, { opacity: 0, y: 10 });
+									if (title) gsap.set(title, { opacity: 0, y: 10 });
+									if (description) gsap.set(description, { opacity: 0, y: 10 });
+									if (techIcons.length > 0) gsap.set(techIcons, { opacity: 0, scale: 0.9, y: 5 });
+
+									// Stagger in
+									if (category) {
+										innerTl.to(category, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, "+=0.15");
+									}
+									if (title) {
+										innerTl.to(title, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "-=0.2");
+									}
+									if (description) {
+										innerTl.to(description, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "-=0.25");
+									}
+									if (techIcons.length > 0) {
+										innerTl.to(techIcons, {
+											opacity: 1,
+											scale: 1,
+											y: 0,
+											duration: 0.3,
+											stagger: 0.04,
+											ease: "back.out(1.2)"
+										}, "-=0.2");
+									}
 								}
-							});
+							}
 						}
 					}
 				});

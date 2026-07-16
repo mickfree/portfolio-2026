@@ -9,23 +9,18 @@ interface Props {
 const { list = [], interval = 5000, class: className = "" } = Astro.props;
 ---
 
-<span
-  class={`animated-list-container ${className}`}
-  data-interval={interval}
->
+<span class={`animated-list-container ${className}`} data-interval={interval}>
   {
-    list && list.length > 0 ? (
-      list.map((item, idx) => (
-        <span
-          class={`animated-list-item ${
-            idx === 0 ? "active" : ""
-          }`}
-          data-index={idx}
-        >
-          {item}
-        </span>
-      ))
-    ) : null
+    list && list.length > 0
+      ? list.map((item, idx) => (
+          <span
+            class={`animated-list-item ${idx === 0 ? "active" : ""}`}
+            data-index={idx}
+          >
+            {item}
+          </span>
+        ))
+      : null
   }
 </span>
 
@@ -35,7 +30,9 @@ const { list = [], interval = 5000, class: className = "" } = Astro.props;
     position: relative;
     overflow: hidden;
     vertical-align: baseline;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .animated-list-item {
@@ -46,16 +43,18 @@ const { list = [], interval = 5000, class: className = "" } = Astro.props;
     opacity: 0;
     transform: translateY(-100%);
     pointer-events: none;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .animated-list-item.active {
     position: relative;
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
   }
-  
+
   .animated-list-item.leaving {
     position: absolute;
     left: 0;
@@ -85,7 +84,9 @@ const { list = [], interval = 5000, class: className = "" } = Astro.props;
       let currentIndex = 0;
 
       const updateDimensions = () => {
-        const activeItem = container.querySelector(".animated-list-item.active") as HTMLElement | null;
+        const activeItem = container.querySelector(
+          ".animated-list-item.active",
+        ) as HTMLElement | null;
         if (activeItem) {
           container.style.width = `${activeItem.offsetWidth}px`;
           container.style.height = `${activeItem.offsetHeight}px`;
