@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import Sidebar from "@/components/common/Sidebar.astro";
 import Preloader from "@/components/common/Preloader.astro";
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
 	title?: string;
@@ -62,6 +63,7 @@ const {
 				<slot />
 			</main>
 		</div>
+		<Analytics />
 	</body>
 </html>
 
